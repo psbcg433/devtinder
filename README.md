@@ -1,17 +1,26 @@
-# DevTinder
+# 🚀 DevTinder
 
-DevTinder is a Node.js and Express-based web application for user registration, authentication, profile management, and connection requests. It uses MongoDB for data storage and Mongoose for schema modeling. The project is modular, with clear separation of concerns for routes, controllers, models, and utilities.
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge)
+![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white&style=for-the-badge)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
-## Features
-- User registration and login with JWT authentication
-- Secure password hashing using bcrypt
-- Profile management (view, update, change password, delete)
-- Send connection requests between users
-- Validation for email and strong passwords
-- Cookie-based session management
-- Modular code structure for scalability
+> **DevTinder** is a modern Node.js & Express web application for user registration, authentication, profile management, and connection requests. Built with MongoDB, Mongoose, and a modular architecture for scalability and maintainability.
 
-## Project Structure
+---
+
+## ✨ Features
+- 🔒 Secure user registration & login (JWT authentication)
+- 🛡️ Password hashing with bcrypt
+- 👤 Profile management (view, update, change password, delete)
+- 🤝 Send connection requests
+- 📧 Email & password validation
+- 🍪 Cookie-based session management
+- 🗂️ Modular code structure
+
+---
+
+## 📁 Project Structure
 ```
 ├── app.js
 ├── server.js
@@ -36,13 +45,20 @@ DevTinder is a Node.js and Express-based web application for user registration, 
 └── README.md
 ```
 
-## Setup Instructions
-1. Clone the repository and navigate to the project folder.
-2. Install dependencies:
+---
+
+## ⚡️ Quick Start
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/psbcg433/devtinder.git
+   cd devtinder
+   ```
+2. **Install dependencies:**
    ```sh
    npm install
    ```
-3. Create a `.env` file with the following variables:
+3. **Configure environment:**
+   Create a `.env` file:
    ```env
    PORT=3000
    MONGO_URI=mongodb://localhost:27017
@@ -50,36 +66,43 @@ DevTinder is a Node.js and Express-based web application for user registration, 
    JWT_SECRET=your_jwt_secret
    JWT_EXPIRES_IN=1d
    ```
-4. Start the server:
+4. **Start the server:**
    ```sh
    npm start
    ```
 
-## API Endpoints
-### Auth
+---
+
+## 📚 API Endpoints
+### 🛡️ Auth
 - `POST /api/v1/auth/register` — Register a new user
 - `POST /api/v1/auth/login` — Login and receive JWT token
 - `POST /api/v1/auth/logout` — Logout user (requires authentication)
 
-### Profile
+### 👤 Profile
 - `GET /api/v1/profile/getProfile` — Get user profile (requires authentication)
 - `PATCH /api/v1/profile/setProfile` — Update user profile (requires authentication)
 - `PATCH /api/v1/profile/setPassword` — Change password (requires authentication)
 - `DELETE /api/v1/profile/deleteProfile` — Delete user profile (requires authentication)
 
-### Request
+### 🤝 Request
 - `POST /api/v1/request/sendConnectionRequest` — Send a connection request (requires authentication)
 
-### Miscellaneous
+### 📦 Miscellaneous
 - `GET /user?email=...` — Fetch user by email
 - `GET /feed` — Get all users
 
-## Technologies Used
-- Node.js
-- Express.js
-- MongoDB & Mongoose
-- bcrypt (password hashing)
-- validator (input validation)
-- jsonwebtoken (JWT)
-- cookie-parser
+---
+
+## 🛠️ Technologies Used
+- **Node.js**
+- **Express.js**
+- **MongoDB & Mongoose**
+- **bcrypt** (password hashing)
+- **validator** (input validation)
+- **jsonwebtoken** (JWT)
+- **cookie-parser**
+
+---
+
 
