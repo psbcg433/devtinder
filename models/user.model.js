@@ -61,6 +61,8 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
+userSchema.index({ firstName: 1, lastName: 1 });
+
 // Static to check email uniqueness and register user
 userSchema.statics.registerUser = async function (userData) {
     // Validate raw password BEFORE encrypting

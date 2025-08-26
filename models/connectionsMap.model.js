@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import User from "./user.model.js";
 const connectionsMapSchema = new mongoose.Schema(
     {
         fromUserId: {
@@ -28,6 +28,10 @@ const connectionsMapSchema = new mongoose.Schema(
 
 )
 
+
+connectionsMapSchema.index({ fromUserId: 1, toUserId: 1 }, { unique: true });
+
+
 // This method saves the left or right swipe of a user (interested or ignored)
 
 connectionsMapSchema.statics.saveConnection = async function (toUserId, fromUserId, status) {
@@ -37,6 +41,10 @@ connectionsMapSchema.statics.saveConnection = async function (toUserId, fromUser
         if (toUserId.toString() === fromUserId.toString()) {
             throw new Error("Can't send connection request to yourself");
         }
+        if (!(await User.exists({ _id: toUserId })) || !(await User.exists({ _id: fromUserId }))) {
+            throw new Error("BAD REQUEST: One or both users do not exist");
+        }
+
         if (!allowedStatuses.includes(status)) {
             throw new Error("Bad Request: Status must be ignored or interested");
         }
