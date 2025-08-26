@@ -5,7 +5,7 @@ import RequestController from './request.controller.js';
 
 const requestRouer = express.Router();
 
-requestRouer.post('/sendConnectionRequest',auuthenticateToken,RequestController.sendRequest)
+requestRouer.post('/send/:status/:toUserId',auuthenticateToken,RequestController.sendRequest)
 
 
 
