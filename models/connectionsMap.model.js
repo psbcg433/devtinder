@@ -68,23 +68,21 @@ connectionsMapSchema.statics.saveConnection = async function (toUserId, fromUser
 connectionsMapSchema.statics.reviewConnection = async function (status, requestId, userId) {
     const allowedStatus = ["accepted", "rejected"]
     try {
-            if(!allowedStatus.includes(status))
+        if (!allowedStatus.includes(status)) {
+            throw new Error("Bad Request: Status must be accepted or rejected");
+        }
+        const connectionRequest = await this.findOne(
             {
-                throw new Error("Bad Request: Status must be accepted or rejected");
+                _id: requestId,
+                toUserId: userId,
+                status: "interested"
             }
-            const connectionRequest = await this.findOne(
-                {
-                    _id:requestId,
-                    toUserId:userId,
-                    status:"interested"
-                }
-            )
-            if(!connectionRequest)
-            {
-                throw new Error("No pending connection request found");
-            }
-            connectionRequest.status = status;
-            return await connectionRequest.save();
+        )
+        if (!connectionRequest) {
+            throw new Error("No pending connection request found");
+        }
+        connectionRequest.status = status;
+        return await connectionRequest.save();
     }
     catch (error) {
         throw new Error(error.message);
@@ -92,8 +90,7 @@ connectionsMapSchema.statics.reviewConnection = async function (status, requestI
 }
 
 //methoid to get pending connection requests for a user
-connectionsMapSchema.statics.getPendingRequests = async function (userId) 
-{
+connectionsMapSchema.statics.getPendingRequests = async function (userId) {
     try {
         const fetchRequest = await this.find({
             toUserId: userId,
@@ -112,24 +109,52 @@ connectionsMapSchema.statics.getUserConnections = async function (userId) {
             { fromUserId: userId, status: "accepted" }
         ]
     })
-    .populate('toUserId', '-email -password -createdAt -updatedAt -__v')
-    .populate('fromUserId', '-email -password -createdAt -updatedAt -__v')
-    .select('toUserId fromUserId');
+        .populate('toUserId', '-email -password -createdAt -updatedAt -__v')
+        .populate('fromUserId', '-email -password -createdAt -updatedAt -__v')
+        .select('toUserId fromUserId');
 
     // Filter out own user data from each connection
-    const filteredConnections = connections.map(conn => {
-        let otherUser;
-        if (conn.fromUserId._id.toString() === userId.toString()) {
-            otherUser = conn.toUserId;
-        } else {
-            otherUser = conn.fromUserId;
-        }
-        return otherUser;
-    });
+    const filteredConnections = connections.map(conn => conn.fromUserId._id.toString() === userId.toString() ? conn.toUserId : conn.fromUserId);
 
     return filteredConnections;
 }
 
+connectionsMapSchema.statics.getUserFeed = async function (userId,skip,limit) {
+    try
+    {   
+            // Fetch the users with whom the user has any interaction 
+            const connectionrequests = await this.find(
+                {
+                    $or:[
+                        { fromUserId: userId },
+                        { toUserId: userId }
+                    ]
+                }
+            )
+            // Remove the duplicate datas
+            const connectedUserIds = new Set();
+            connectionrequests.forEach(request => {
+                connectedUserIds.add(request.fromUserId.toString());
+                connectedUserIds.add(request.toUserId.toString());
+            });
+
+            //fetch the feed data excluding the connected users and the user himself
+            connectedUserIds.add(userId.toString());
+            const feedData = await User.find(
+                {
+                    _id: { $nin: Array.from(connectedUserIds) }
+                }
+            ).select('-email -password -createdAt -updatedAt -__v')
+            .skip(skip)
+            .limit(limit);
+            return feedData;
+
+    }
+    catch(error)
+    {
+        throw new Error(error.message);
+    }
+}
 
 
 const ConnectionsMap = mongoose.model("ConnectionsMap", connectionsMapSchema);

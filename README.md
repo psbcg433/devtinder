@@ -74,23 +74,56 @@
 ---
 
 ## 📚 API Endpoints
-### 🛡️ Auth
-- `POST /api/v1/auth/register` — Register a new user
-- `POST /api/v1/auth/login` — Login and receive JWT token
-- `POST /api/v1/auth/logout` — Logout user (requires authentication)
 
-### 👤 Profile
-- `GET /api/v1/profile/getProfile` — Get user profile (requires authentication)
-- `PATCH /api/v1/profile/setProfile` — Update user profile (requires authentication)
-- `PATCH /api/v1/profile/setPassword` — Change password (requires authentication)
-- `DELETE /api/v1/profile/deleteProfile` — Delete user profile (requires authentication)
+## �️ API Endpoints
 
-### 🤝 Request
-- `POST /api/v1/request/sendConnectionRequest` — Send a connection request (requires authentication)
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|:------------:|
+| **POST** | `/api/v1/auth/register` | Register a new user | ❌ |
+| **POST** | `/api/v1/auth/login` | Login and receive JWT token | ❌ |
+| **POST** | `/api/v1/auth/logout` | Logout user | ✅ |
+| **GET** | `/api/v1/profile/getProfile` | Get user profile | ✅ |
+| **PATCH** | `/api/v1/profile/setProfile` | Update user profile | ✅ |
+| **PATCH** | `/api/v1/profile/setPassword` | Change password | ✅ |
+| **DELETE** | `/api/v1/profile/deleteProfile` | Delete user profile | ✅ |
+| **POST** | `/api/v1/request/send/:status/:toUserId` | Send a connection request (`status`: interested/ignored) | ✅ |
+| **POST** | `/api/v1/request/review/:status/:requestId` | Review a connection request (`status`: accepted/rejected) | ✅ |
+| **GET** | `/api/v1/user/getRequest` | Get pending connection requests | ✅ |
+| **GET** | `/api/v1/user/getConnections` | Get accepted connections | ✅ |
+| **GET** | `/api/v1/user/getFeed` | Get user feed (suggested users) | ✅ |
 
-### 📦 Miscellaneous
-- `GET /user?email=...` — Fetch user by email
-- `GET /feed` — Get all users
+---
+
+## 🎨 Technologies Used
+<p align="center">
+   <img src="https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge" />
+   <img src="https://img.shields.io/badge/Express-000000?logo=express&logoColor=white&style=for-the-badge" />
+   <img src="https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white&style=for-the-badge" />
+   <img src="https://img.shields.io/badge/bcrypt-00599C?logo=github&logoColor=white&style=for-the-badge" />
+   <img src="https://img.shields.io/badge/JWT-000000?logo=jsonwebtokens&logoColor=white&style=for-the-badge" />
+   <img src="https://img.shields.io/badge/validator-FF9900?logo=javascript&logoColor=white&style=for-the-badge" />
+   <img src="https://img.shields.io/badge/cookie--parser-4B8BBE?logo=javascript&logoColor=white&style=for-the-badge" />
+</p>
+
+---
+
+## 📝 Example .env
+```env
+PORT=3000
+MONGO_URI=mongodb://localhost:27017
+DB_NAME=devtinder
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=1d
+```
+
+---
+
+## 💡 Tips
+- All endpoints requiring authentication expect a valid JWT token in cookies.
+- Use tools like Postman or Insomnia for API testing.
+- Modular structure makes it easy to extend features.
+
+---
 
 ---
 

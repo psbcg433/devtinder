@@ -23,32 +23,6 @@ app.use("/api/v1/user", userRouter);
 
 
 
-// Fetch user by email
-app.get("/user", async (req, res) => {
-    const { email } = req.query;
-    try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        res.status(200).json(user);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// Get all users
-app.get("/feed", async (req, res) => {
-    try {
-        const feed = await User.find({});
-        if (feed.length === 0) {
-            return res.status(404).json({ message: "No users found" });
-        }
-        res.status(200).json(feed);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 
 
