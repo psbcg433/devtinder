@@ -32,6 +32,20 @@ const connectionsMapSchema = new mongoose.Schema(
 connectionsMapSchema.index({ fromUserId: 1, toUserId: 1 }, { unique: true });
 
 
+connectionsMapSchema.deleteUserRelatedData = async function (userId) {
+    try {
+        await this.deleteMany({
+            $or: [
+                { fromUserId: userId },
+                { toUserId: userId }
+            ]
+        });
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
 // This method saves the left or right swipe of a user (interested or ignored)
 
 connectionsMapSchema.statics.saveConnection = async function (toUserId, fromUserId, status) {
