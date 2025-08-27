@@ -98,14 +98,36 @@ connectionsMapSchema.statics.getPendingRequests = async function (userId)
         const fetchRequest = await this.find({
             toUserId: userId,
             status: "interested"
-        }).populate('fromUserId', '-email -password -createdAt -updatedAt -__v').select('fromUserId');
-        if (!fetchRequest) {
-            return [];
-        }
+        }).populate('fromUserId', '-email -password -createdAt -updatedAt -__v').select('fromUserId -_id')
         return fetchRequest;
     } catch (error) {
         throw new Error(error.message);
     }
+}
+
+connectionsMapSchema.statics.getUserConnections = async function (userId) {
+    const connections = await this.find({
+        $or: [
+            { toUserId: userId, status: "accepted" },
+            { fromUserId: userId, status: "accepted" }
+        ]
+    })
+    .populate('toUserId', '-email -password -createdAt -updatedAt -__v')
+    .populate('fromUserId', '-email -password -createdAt -updatedAt -__v')
+    .select('toUserId fromUserId');
+
+    // Filter out own user data from each connection
+    const filteredConnections = connections.map(conn => {
+        let otherUser;
+        if (conn.fromUserId._id.toString() === userId.toString()) {
+            otherUser = conn.toUserId;
+        } else {
+            otherUser = conn.fromUserId;
+        }
+        return otherUser;
+    });
+
+    return filteredConnections;
 }
 
 

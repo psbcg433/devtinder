@@ -4,7 +4,8 @@ import { auuthenticateToken } from "../../middlewares/auth.js";
 
 const userRouter = express.Router();
 
-//API to get pending connection requests
+
 userRouter.get("/getRequest",auuthenticateToken,UserController.getPendingRequests);
+userRouter.get("/getConnections",auuthenticateToken,UserController.getConnections);
 
 export default userRouter;
