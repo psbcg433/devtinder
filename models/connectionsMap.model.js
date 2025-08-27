@@ -64,6 +64,33 @@ connectionsMapSchema.statics.saveConnection = async function (toUserId, fromUser
     }
 }
 
+// method to accept or reject the connection requeast
+connectionsMapSchema.statics.reviewConnection = async function (status, requestId, userId) {
+    const allowedStatus = ["accepted", "rejected"]
+    try {
+            if(!allowedStatus.includes(status))
+            {
+                throw new Error("Bad Request: Status must be accepted or rejected");
+            }
+            const connectionRequest = await this.findOne(
+                {
+                    id:requestId,
+                    toUserId:userId,
+                    status:"interested"
+                }
+            )
+            if(!connectionRequest)
+            {
+                throw new Error("No pending connection request found");
+            }
+            connectionRequest.status = status;
+            return await connectionRequest.save();
+    }
+    catch (error) {
+        throw new Error(error.message);
+    }
+}
+
 
 
 const ConnectionsMap = mongoose.model("ConnectionsMap", connectionsMapSchema);
