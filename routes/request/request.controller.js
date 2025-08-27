@@ -18,6 +18,7 @@ class RequestController {
         try{
             const {status,requestId} = req.params;
             const userId = req.user._id;
+          
             await ConnectionsMap.reviewConnection(status,requestId,userId);
             res.status(200).json({ message: `Connection Request: ${status}` });
         }

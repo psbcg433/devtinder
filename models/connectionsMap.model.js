@@ -74,7 +74,7 @@ connectionsMapSchema.statics.reviewConnection = async function (status, requestI
             }
             const connectionRequest = await this.findOne(
                 {
-                    id:requestId,
+                    _id:requestId,
                     toUserId:userId,
                     status:"interested"
                 }
