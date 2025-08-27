@@ -91,6 +91,23 @@ connectionsMapSchema.statics.reviewConnection = async function (status, requestI
     }
 }
 
+//methoid to get pending connection requests for a user
+connectionsMapSchema.statics.getPendingRequests = async function (userId) 
+{
+    try {
+        const fetchRequest = await this.find({
+            toUserId: userId,
+            status: "interested"
+        }).populate('fromUserId', '-email -password -createdAt -updatedAt -__v').select('fromUserId');
+        if (!fetchRequest) {
+            return [];
+        }
+        return fetchRequest;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
 
 
 const ConnectionsMap = mongoose.model("ConnectionsMap", connectionsMapSchema);
